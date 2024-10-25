@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createTarget, updateTarget } from "../api/requests";
+import styles from "./styles/TargetForm.module.css";
 
 interface TargetFormProps {
   targetId?: number;
@@ -19,24 +20,33 @@ const TargetForm: React.FC<TargetFormProps> = ({ targetId, onSuccess }) => {
     } else {
       await createTarget({ title, description, isComplete });
     }
-    onSuccess(); // Atualiza a lista de Targets
+    onSuccess();
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>{targetId ? "Editar Target" : "Novo Target"}</h3>
+    <form className={styles.formContainer} onSubmit={handleSubmit}>
+      <h3 className={styles.formTitle}>
+        {targetId ? "Editar Target" : "Novo Target"}
+      </h3>
+
+      <label className={styles.formLabel}>Título</label>
       <input
         type="text"
+        className={styles.formField}
         placeholder="Título"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
+
+      <label className={styles.formLabel}>Descrição</label>
       <textarea
+        className={styles.formField}
         placeholder="Descrição"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <label>
+
+      <label className={styles.formLabel}>
         Concluído
         <input
           type="checkbox"
@@ -44,7 +54,10 @@ const TargetForm: React.FC<TargetFormProps> = ({ targetId, onSuccess }) => {
           onChange={(e) => setIsComplete(e.target.checked)}
         />
       </label>
-      <button type="submit">{targetId ? "Atualizar" : "Criar"}</button>
+
+      <button type="submit" className={styles.submitButton}>
+        {targetId ? "Atualizar" : "Criar"}
+      </button>
     </form>
   );
 };
