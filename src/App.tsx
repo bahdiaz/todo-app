@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import TargetList from "./components/TargetList";
 import TargetForm from "./components/TargetForm";
+import styles from "./styles/App.module.css";
 
 const App: React.FC = () => {
   const [refresh, setRefresh] = useState(false);
@@ -8,7 +9,7 @@ const App: React.FC = () => {
   const refreshTargets = () => setRefresh(!refresh);
 
   return (
-    <div>
+    <div className={styles.appContainer}>
       <TargetForm onSuccess={refreshTargets} />
       <TargetList key={refresh.toString()} />
     </div>
