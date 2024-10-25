@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import TargetList from "./components/TargetList";
 import TargetForm from "./components/TargetForm";
-import styles from "./styles/App.module.css";
+import styles from "./components/styles/App.module.css";
 
 const App: React.FC = () => {
   const [refresh, setRefresh] = useState(false);
