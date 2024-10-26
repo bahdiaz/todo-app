@@ -1,36 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { createTarget, updateTarget, getTargetById } from "../api/requests";
-import styles from "./styles/TargetForm.module.css";
+import { createTodo, updateTodo, getTodoById } from "../api/requests";
+import styles from "./styles/TodoForm.module.css";
 
-interface TargetFormProps {
-  targetId?: number; // ID para edição (opcional)
-  onSuccess: () => void; // Callback para atualizar a lista após submit
+interface TodoFormProps {
+  todoId?: number; // ID para edição (opcional)
+  targetId: number; // ID do Target relacionado
+  onSuccess: () => void; // Callback para atualizar a lista após o submit
 }
 
-const TargetForm: React.FC<TargetFormProps> = ({ targetId, onSuccess }) => {
+const TodoForm: React.FC<TodoFormProps> = ({ todoId, targetId, onSuccess }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isComplete, setIsComplete] = useState(false);
 
-  // Carrega os dados do Target para edição, caso targetId seja passado
+  // Carrega os dados do TODO para edição, caso todoId seja passado
   useEffect(() => {
-    if (targetId) {
-      getTargetById(targetId).then((response) => {
-        const target = response.data;
-        setTitle(target.title);
-        setDescription(target.description || "");
-        setIsComplete(target.isComplete);
+    if (todoId) {
+      getTodoById(todoId).then((response) => {
+        const todo = response.data;
+        setTitle(todo.title);
+        setDescription(todo.description || "");
+        setIsComplete(todo.isComplete);
       });
     }
-  }, [targetId]);
+  }, [todoId]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (targetId) {
-      await updateTarget(targetId, { title, description, isComplete });
+    if (todoId) {
+      await updateTodo(todoId, { title, description, isComplete, targetId });
     } else {
-      await createTarget({ title, description, isComplete });
+      await createTodo({ title, description, isComplete, targetId });
     }
     onSuccess(); // Atualiza a lista após o submit
   };
@@ -38,7 +39,7 @@ const TargetForm: React.FC<TargetFormProps> = ({ targetId, onSuccess }) => {
   return (
     <form className={styles.formContainer} onSubmit={handleSubmit}>
       <h3 className={styles.formTitle}>
-        {targetId ? "Editar Target" : "Novo Target"}
+        {todoId ? "Editar TODO" : "Novo TODO"}
       </h3>
 
       <label className={styles.formLabel}>Título</label>
@@ -68,10 +69,10 @@ const TargetForm: React.FC<TargetFormProps> = ({ targetId, onSuccess }) => {
       </label>
 
       <button type="submit" className={styles.submitButton}>
-        {targetId ? "Atualizar" : "Criar"}
+        {todoId ? "Atualizar" : "Criar"}
       </button>
     </form>
   );
 };
 
-export default TargetForm;
+export default TodoForm;
